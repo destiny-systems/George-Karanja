@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>George Karanja | Real Estate Portfolio</title>
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+</head>
+<body>
+
+<nav class="nav">
+    <div class="logo">George <span>Karanja</span></div>
+</nav>
+
+<div class="portfolio-hero-wrap" id="portfolio-hero-bg">
+    {% if owner.homepage_background %}
+    <div class="portfolio-hero-bg-slide active" style="background-image:url('{{ owner.homepage_background.url }}');"></div>
+    {% endif %}
+    <div class="portfolio-hero-overlay"></div>
+    <div class="portfolio-hero">
+        {% if owner.photo %}
+        <img src="{{ owner.photo.url }}" alt="{{ owner.name }}" style="width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:1.5rem; border:2px solid #c9a24b;">
+        {% endif %}
+        <span class="label-eyebrow" style="--accent:#c9a24b;">Real Estate Portfolio</span>
+        <h1>Developments By George Karanja</h1>
+        <p>{{ owner.bio|default:"Explore our collection of premium residential developments across Kenya, each offering a distinct blend of luxury, comfort, and modern design." }}</p>
+    </div>
+</div>
+
+<div class="property-grid">
+    {% for property in properties %}
+    <a href="{{ property.get_absolute_url }}" class="property-card" style="--card-accent:{{ property.accent_color }};">
+        <div class="property-card-media">
+            {% if property.hero_image %}
+            <img src="{{ property.hero_image.url }}" alt="{{ property.name }}">
+            {% else %}
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800" alt="{{ property.name }}">
+            {% endif %}
+            <span class="property-card-badge">{{ property.location_name }}</span>
+        </div>
+        <div class="property-card-body">
+            <h3>{{ property.name }}</h3>
+            <p>{{ property.card_summary|default:property.tagline }}</p>
+            <div class="property-card-price">From KSh {{ property.starting_price|floatformat:0 }}</div>
+            <div class="property-card-loc">{{ property.location_name }}</div>
+        </div>
+    </a>
+    {% empty %}
+    <p style="color:#8f8a82; text-align:center;">No properties added yet.</p>
+    {% endfor %}
+</div>
+
+<footer class="footer">
+    <p>&copy; {% now "Y" %} George Karanja. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
